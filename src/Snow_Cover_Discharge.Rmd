@@ -1,0 +1,79 @@
+---
+title: "Snow Impact on Discharge"
+author: "Kevin Young"
+date: "September 10, 2019"
+output: html_document
+---
+
+### Set up
+```{r setup, warning=FALSE, message=FALSE, include=FALSE}
+library(tidyverse) 
+library(lubridate)
+library(dataRetrieval)
+```
+
+
+### Reading in the Data
+```{r Reading in Data, echo=FALSE}
+ndsi <- read_csv('data/hayman_ndsi.csv') %>%
+  rename(burned=2,unburned=3) %>%
+  filter(!is.na(burned),
+         !is.na(unburned)) %>%
+  gather(.,key='site',
+         value='ndsi',
+         -DateTime)
+```
+
+### Putting data into Long Format
+
+```{r Converting into Long, echo=FALSE}
+#USGS gauge above cheeseman lake '00060'
+q_hayman <- readNWISdata(sites=c('06700000'), #Site code 
+                  parameterCd='00060', #discharge code in cfs
+                  service='dv', # service = daily values (versus annual)
+                  startDate='1984-10-01', #Start date for getting the data
+                  endDate = '2019-9-10') %>% # End date (today) 
+  rename(q_cfs = X_00060_00003,
+         quality_cd = X_00060_00003_cd) %>% #rename long column name
+  filter(!is.na(q_cfs)) %>% #Drop NAs which can occur when there is ice or sensor breaks
+  as_tibble() #To make it act like a tibble
+```
+
+###Converting to Water Years
+
+```{r Water Years, echo=FALSE}
+q_water_year <- q_hayman %>%
+  mutate(month=month(dateTime),
+         year_offset = ifelse(month > 9,1,0),
+         wtr_yr = year(dateTime) + year_offset)
+
+table(q_water_year$wtr_yr)
+
+```
+
+###NDSI Water Year
+```{r NDSI Water echo=F}
+ndsi_water_year<-q_water_year <- ndsi %>%
+  mutate(month=month(DateTime),
+         year_offset = ifelse(month > 9,1,0),
+         wtr_yr = year(DateTime) + year_offset)
+
+  
+```
+
+
+
+### Filtering out complete readings
+
+whole Q year water years
+We need to filter out years will full number of observations. Max number of observations is 183. 
+mutate(count = n())%>%
+ungroup()%>%
+filter(count==max(count))%>% #Keeps only years with 183 readings
+
+```{r Months with Snow, echo=FALSE}
+complete_readings<-filter(ndsi_water_year) 
+
+```
+ 
+

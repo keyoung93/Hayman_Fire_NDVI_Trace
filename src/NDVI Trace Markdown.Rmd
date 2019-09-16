@@ -1,0 +1,43 @@
+---
+title: "NDVI Trace in Hayman Fire"
+author: "Kevin Young"
+date: "September 10, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(tidyr)
+library(ggthemes)
+library(lubridate)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Hayman Fire
+
+2002 Large fire in central Colorado. Analysis is how fire alterted vegetation
+
+### Data Read 
+First we need to read in the data
+
+```{r data read in}
+#Reading in the data. 
+ndvi <- read_csv('data/hayman_ndvi.csv') %>%
+  rename(burned=2,unburned=3) %>%
+  filter(!is.na(burned),
+         !is.na(unburned))
+```
+
+## Tidying
+
+Next we clean up the data
+
+```{r Tidying}
+# Converting from wide to long data (One column for burned & unburned)
+ndvi_long <- gather(ndvi,
+                    key='site',
+                    value='NDVI',
+                    -DateTime)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

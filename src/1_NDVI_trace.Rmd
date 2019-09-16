@@ -2,7 +2,8 @@
 title: "NDVI Trace in Hayman Fire"
 author: "Matthew Ross"
 date: "9/5/2019"
-output: html_document
+output: pdf_document: default
+  
 ---
 
 ```{r setup, include=FALSE}

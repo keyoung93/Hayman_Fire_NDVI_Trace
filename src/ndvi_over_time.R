@@ -4,6 +4,8 @@ library(ggthemes)
 library(lubridate)
 
 
+
+
 #Reading in the data. 
 ndvi <- read_csv('data/hayman_ndvi.csv') %>%
   rename(burned=2,unburned=3) %>%
