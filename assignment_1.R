@@ -54,16 +54,11 @@ summary(full_wide)
 ggplot(summer_only,aes(x=ndmi, y=ndvi, color=site))+
   geom_point()+
   theme_few()+
-  scale_color_few()
+  scale_color_few()+
+  xlab('NDMI')+
+  ylab('NDVI')
 
   
-  
-
-  
-
-
-
-
 
 ## End Code for Question 1 -----------
 
@@ -94,21 +89,12 @@ summer_winter<- inner_join(winter_months,summer_months, by=c("year", "site"))
 ggplot(summer_winter, aes(x=ndsi_mean, y=ndvi_mean, color=site))+
   geom_point()+
   theme_few()+
-  theme(legend.position = c(0.85,0.3))
+  theme(legend.position = c(0.85,0.3))+
+  xlab('Mean NDSI')+
+  ylab('Mean NDVI')
   
   
-  
-                          
-
-
-
-  
-  
-  
-
-
-
-## End code for question 2 -----------------
+  ## End code for question 2 -----------------
 
 
 ###### Question 3 ####
@@ -123,14 +109,12 @@ pre_post<- mutate(summer_winter, condition = ifelse(year<2002,"pre","post"))
 ggplot(pre_post, aes(x=ndsi_mean, y=ndvi_mean, color=site))+
   geom_point()+
   theme_few()+
-  facet_wrap(~condition)
-
-
-
-
-
+  facet_wrap(~condition)+
+  xlab('Mean NDSI')+
+  ylab('Mean NDVI')
 
 ## End code for question 3
+
 
 ###### Question 4 #####
 #What month is the greenest month on average? Does this change in the burned
@@ -149,7 +133,8 @@ summer2<- ndvi %>%
 
 ggplot(summer2, aes(x=month, y=monthly_ndvi))+
          geom_point()+
-         theme_few()
+         theme_few()+
+         ylab('Monthly NDVI')
         
 
 # Personal Note - "Gather" combined burned and unburned into one column
@@ -182,7 +167,9 @@ ndvi_both<- bind_rows(ndvi_pre_fire_means, ndvi_post_fire_means)
 
 ggplot(ndvi_both, aes(x=month, y=mean_ndvi_burned, color= treatment))+
   geom_point()+
-  theme_few()
+  theme_few()+
+  xlab('Month')+
+  ylab('Mean NDVI in Burned Plots')
 
   
 
@@ -204,4 +191,7 @@ winter2<- ndsi %>%
 
 ggplot(winter2, aes(x=month, y=monthly_ndsi))+
   geom_point()+
-  theme_few()
+  theme_few()+
+  xlab('Month')+
+  ylab('Monthly NDSI')
+##January is snowiest month on average
